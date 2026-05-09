@@ -28,7 +28,7 @@ window.CARD_CONFIG = {
     intro:     "request the pleasure of your company<br>at a baby shower celebrating",
     honorees:  "Evan & Selina",            // guests of honor
     subhead:   "Celebrating",              // small line above the big text
-    feature:   "Their Baby Boy",           // BIG text — main feature line
+    feature:   "Their little one on the way",           // BIG text — main feature line
 
     tagline:   "The adventure starts in July.<br>The party starts June 8<sup>th</sup>.",
 
