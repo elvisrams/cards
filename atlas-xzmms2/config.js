@@ -69,7 +69,7 @@ window.CARD_CONFIG = {
     subhead:    "June 8<sup>th</sup> · Washington, DC",
 
     // Where RSVPs go. Paste your Google Apps Script Web App URL here.
-    appsScriptUrl: "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE",
+    appsScriptUrl: "https://script.google.com/macros/s/AKfycbzmJtQjDai1nNLDnJkdhz90kzKnmd8ks7tTqI7DzqsEqFq9TB44KjjhFuNlyZ6CfQ5Q/exec",
 
     // Confirmation messages after submission
     confirmYes: {
