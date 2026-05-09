@@ -28,7 +28,7 @@ window.CARD_CONFIG = {
     intro:     "request the pleasure of your company<br>at a baby shower celebrating",
     honorees:  "Evan & Selina",            // guests of honor
     subhead:   "Celebrating",              // small line above the big text
-    feature:   "Their little one on the way",           // BIG text — main feature line
+    feature:   "Their Baby Boy",           // BIG text — main feature line
 
     tagline:   "The adventure starts in July.<br>The party starts June 8<sup>th</sup>.",
 
@@ -37,13 +37,12 @@ window.CARD_CONFIG = {
       { label: "Where",       value: "329 11<sup>th</sup> Street NE<br>Washington, DC 20002",
                               link:  "https://maps.app.goo.gl/Nj1S126tVme6LA396" },
       { label: "Provisions",  value: "<em>Dinner provided</em>" },
-      { label: "Registry",    value: "Babylist",
-                              link:  "https://my.babylist.com/baby-reg-selina-wang" },
     ],
 
     // Buttons under the details
     buttons: [
       { label: "RSVP",          href: "rsvp.html",   primary: true  },
+      { label: "View Registry", href: "https://my.babylist.com/baby-reg-selina-wang", primary: false, external: true },
       { label: "Get Directions", href: "https://maps.app.goo.gl/Nj1S126tVme6LA396", primary: false, external: true },
     ],
 
