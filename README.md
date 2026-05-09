@@ -80,7 +80,7 @@ First activation takes ~1–2 minutes. After that, every push deploys in ~30 sec
 
 ### 5. Test it
 
-Open `https://YOUR_USERNAME.github.io/cards/atlas-xzmms2/invite.html` on your phone. Tap envelope → submit RSVP → check your Sheet (should appear in 2 seconds) and your email at evan@yedi.app (notification).
+Open `https://YOUR_USERNAME.github.io/cards/atlas-xzmms2/invite.html` on your phone. Tap envelope → submit RSVP → check your Sheet (should appear in 2 seconds) and your email at evan email (notification).
 
 ### 6. Text it out
 
