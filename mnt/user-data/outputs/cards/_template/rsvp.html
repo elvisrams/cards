@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSVP</title>
+<meta name="theme-color" content="#0d2a52">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Tenor+Sans&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+
+<script src="config.js"></script>
+
+<style>
+  :root {
+    --ink: #1a3a6b;
+    --ink-soft: #2d4a7a;
+    --gold: #c9a961;
+    --cream: #f5ecd6;
+    --cream-warm: #faf3e0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px; color: var(--ink); position: relative;
+  }
+
+  .stars { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+  .star {
+    position: absolute; width: 2px; height: 2px;
+    background: #f5ecd6; border-radius: 50%; opacity: 0;
+    animation: twinkle 3s infinite ease-in-out;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 6px #f5ecd6; }
+  }
+
+  .card {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 520px;
+    background: var(--cream-warm); border-radius: 6px;
+    padding: 48px 40px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 10px 30px rgba(0, 0, 0, 0.3);
+    background-image: radial-gradient(ellipse at top, rgba(201, 169, 97, 0.12) 0%, transparent 60%);
+  }
+  .card-inner {
+    border: 1px solid var(--gold); border-radius: 2px;
+    padding: 36px 28px; position: relative;
+  }
+  .card-inner::before, .card-inner::after {
+    content: ''; position: absolute; width: 18px; height: 18px;
+    border: 1px solid var(--gold);
+  }
+  .card-inner::before { top: -4px; left: -4px; border-right: none; border-bottom: none; }
+  .card-inner::after { bottom: -4px; right: -4px; border-left: none; border-top: none; }
+
+  .header { text-align: center; margin-bottom: 32px; }
+  .compass { width: 36px; height: 36px; margin: 0 auto 14px; color: var(--gold); }
+
+  .eyebrow {
+    font-family: 'Tenor Sans', serif; font-size: 10px;
+    letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 10px;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500;
+    font-size: 32px; color: var(--ink); line-height: 1.1; margin-bottom: 6px;
+  }
+  .subhead { font-family: 'Cormorant Garamond', serif; font-style: italic;
+             color: var(--ink-soft); font-size: 16px; }
+
+  .ornament { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 20px 0 28px; }
+  .ornament-line { flex: 1; max-width: 60px; height: 1px;
+                   background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .ornament-shell { color: var(--gold); font-size: 14px; }
+
+  .field { margin-bottom: 22px; }
+  .field label {
+    display: block; font-family: 'Tenor Sans', serif; font-size: 10px;
+    letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+  }
+  .field-help {
+    color: var(--ink-soft); text-transform: none; letter-spacing: 0;
+    font-style: italic; font-family: 'Cormorant Garamond'; font-size: 14px;
+  }
+  .field input[type="text"], .field input[type="email"],
+  .field input[type="number"], .field textarea {
+    width: 100%; padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(201, 169, 97, 0.4);
+    border-radius: 2px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px; color: var(--ink); transition: all 0.2s;
+  }
+  .field input:focus, .field textarea:focus {
+    outline: none; border-color: var(--gold);
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.15);
+  }
+  .field textarea { min-height: 80px; resize: vertical; }
+
+  .radio-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .radio-option { position: relative; cursor: pointer; }
+  .radio-option input { position: absolute; opacity: 0; pointer-events: none; }
+  .radio-label {
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px 12px; border: 1px solid rgba(201, 169, 97, 0.5);
+    border-radius: 2px;
+    font-family: 'Tenor Sans', serif; font-size: 11px;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--ink-soft); background: rgba(255,255,255,0.4);
+    transition: all 0.2s; text-align: center; line-height: 1.3;
+  }
+  .radio-option:hover .radio-label { border-color: var(--gold); background: rgba(255,255,255,0.7); }
+  .radio-option input:checked + .radio-label {
+    background: var(--ink); color: var(--cream-warm);
+    border-color: var(--ink); box-shadow: 0 4px 14px rgba(26, 58, 107, 0.3);
+  }
+
+  .conditional {
+    max-height: 0; overflow: hidden; opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
+    margin-bottom: 0;
+  }
+  .conditional.shown { max-height: 400px; opacity: 1; margin-bottom: 22px; }
+
+  .submit-btn {
+    width: 100%; padding: 18px;
+    background: var(--ink); color: var(--cream-warm);
+    border: 1px solid var(--ink);
+    font-family: 'Tenor Sans', serif; font-size: 12px;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    cursor: pointer; border-radius: 2px;
+    transition: all 0.3s; margin-top: 8px;
+  }
+  .submit-btn:hover:not(:disabled) {
+    background: var(--gold); border-color: var(--gold); color: var(--ink);
+    transform: translateY(-2px); box-shadow: 0 8px 20px rgba(201, 169, 97, 0.35);
+  }
+  .submit-btn:disabled { opacity: 0.6; cursor: wait; }
+
+  .back-link {
+    display: block; text-align: center; margin-top: 18px;
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    color: var(--ink-soft); text-decoration: none; font-size: 15px;
+  }
+  .back-link:hover { color: var(--gold); }
+
+  .confirmation { display: none; text-align: center; padding: 20px 10px; }
+  .confirmation.shown { display: block; animation: fadeUp 0.8s ease; }
+  .confirmation-icon { width: 60px; height: 60px; margin: 0 auto 20px; color: var(--gold); }
+  .confirmation h2 {
+    font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500;
+    font-size: 32px; color: var(--ink); margin-bottom: 10px;
+  }
+  .confirmation p {
+    font-family: 'Cormorant Garamond', serif; color: var(--ink-soft);
+    font-size: 17px; line-height: 1.5; max-width: 360px; margin: 0 auto;
+  }
+  .signature { font-family: 'Caveat', cursive; font-size: 22px; color: var(--gold); margin-top: 24px; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .form-hidden { display: none; }
+
+  @media (max-width: 480px) {
+    .card { padding: 32px 20px; }
+    .card-inner { padding: 28px 16px; }
+    h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="card">
+  <div class="card-inner">
+
+    <div id="formView">
+      <div class="header">
+        <svg class="compass" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2">
+          <circle cx="20" cy="20" r="18"/>
+          <circle cx="20" cy="20" r="13"/>
+          <path d="M20 4 L23 20 L20 36 L17 20 Z" fill="currentColor" opacity="0.4"/>
+          <path d="M4 20 L20 17 L36 20 L20 23 Z" fill="currentColor" opacity="0.2"/>
+          <circle cx="20" cy="20" r="1.5" fill="currentColor"/>
+        </svg>
+        <div class="eyebrow" id="rEyebrow">Kindly Reply</div>
+        <h1 id="rHeadline">RSVP</h1>
+        <div class="subhead" id="rSubhead"></div>
+      </div>
+
+      <div class="ornament">
+        <div class="ornament-line"></div>
+        <span class="ornament-shell">✦</span>
+        <div class="ornament-line"></div>
+      </div>
+
+      <form id="rsvpForm">
+        <div class="field">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" required autocomplete="name">
+        </div>
+
+        <div class="field">
+          <label for="email">Email <span class="field-help">(so we can reach you)</span></label>
+          <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
+
+        <div class="field">
+          <label>Will You Join Us?</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="attending" value="Yes" required>
+              <span class="radio-label">Joyfully Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="attending" value="No">
+              <span class="radio-label">Regretfully No</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="conditional" id="yesFields">
+          <div class="field">
+            <label for="guests">Guests in Your Party <span class="field-help">(including you)</span></label>
+            <input type="number" id="guests" name="guests" min="1" max="6" value="1">
+          </div>
+          <div class="field">
+            <label for="dietary">Dietary Notes or Allergies</label>
+            <textarea id="dietary" name="dietary" placeholder="Anything we should know? (Optional)"></textarea>
+          </div>
+        </div>
+
+        <div class="conditional" id="noFields">
+          <div class="field">
+            <label for="message">A Note for the Hosts</label>
+            <textarea id="message" name="message" placeholder="We'll miss you — leave a note (Optional)"></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Send Reply</button>
+      </form>
+
+      <a href="invite.html" class="back-link">← Back to invitation</a>
+    </div>
+
+    <div class="confirmation" id="confirmationView">
+      <svg class="confirmation-icon" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="30" cy="30" r="28"/>
+        <path d="M18 30 L26 38 L42 22" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h2 id="confirmHeadline">Reply Received</h2>
+      <p id="confirmMessage">Thank you — your reply has been recorded.</p>
+      <div class="signature" id="confirmSignoff"></div>
+      <a href="invite.html" class="back-link" style="margin-top: 30px; display: inline-block;">← View invitation</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const cfg = window.CARD_CONFIG;
+  if (!cfg) { document.body.innerHTML = '<p style="padding:40px;">Missing config.js</p>'; throw new Error('no config'); }
+
+  const r = cfg.rsvp || {};
+
+  // Apply theme
+  const root = document.documentElement;
+  if (cfg.theme) {
+    if (cfg.theme.ink)       root.style.setProperty('--ink', cfg.theme.ink);
+    if (cfg.theme.inkSoft)   root.style.setProperty('--ink-soft', cfg.theme.inkSoft);
+    if (cfg.theme.gold)      root.style.setProperty('--gold', cfg.theme.gold);
+    if (cfg.theme.cream)     root.style.setProperty('--cream', cfg.theme.cream);
+    if (cfg.theme.creamWarm) root.style.setProperty('--cream-warm', cfg.theme.creamWarm);
+    if (cfg.theme.bgGradient) document.body.style.background = cfg.theme.bgGradient;
+  }
+
+  // Page title and copy
+  document.title = `RSVP — ${cfg.meta?.title || ''}`.trim();
+  if (r.eyebrow)  document.getElementById('rEyebrow').textContent = r.eyebrow;
+  if (r.headline) document.getElementById('rHeadline').textContent = r.headline;
+  if (r.subhead)  document.getElementById('rSubhead').innerHTML = r.subhead;
+
+  // Starfield
+  if (cfg.theme?.showStars !== false) {
+    const sc = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.animationDelay = Math.random() * 3 + 's';
+      s.style.animationDuration = (2 + Math.random() * 3) + 's';
+      sc.appendChild(s);
+    }
+  }
+
+  // Conditional fields
+  const radios = document.querySelectorAll('input[name="attending"]');
+  const yesFields = document.getElementById('yesFields');
+  const noFields = document.getElementById('noFields');
+  radios.forEach(rad => rad.addEventListener('change', () => {
+    if (rad.value === 'Yes' && rad.checked) { yesFields.classList.add('shown'); noFields.classList.remove('shown'); }
+    else if (rad.value === 'No' && rad.checked) { noFields.classList.add('shown'); yesFields.classList.remove('shown'); }
+  }));
+
+  // Submit
+  const form = document.getElementById('rsvpForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const formView = document.getElementById('formView');
+  const confirmView = document.getElementById('confirmationView');
+  const confirmHeadline = document.getElementById('confirmHeadline');
+  const confirmMessage = document.getElementById('confirmMessage');
+  const confirmSignoff = document.getElementById('confirmSignoff');
+
+  if (r.signoff) confirmSignoff.textContent = r.signoff;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    // Identify which event this RSVP is for (folder name)
+    const eventSlug = window.location.pathname.split('/').filter(Boolean).slice(-2, -1)[0] || 'unknown';
+
+    const data = {
+      timestamp: new Date().toISOString(),
+      event:   eventSlug,
+      name:    document.getElementById('name').value,
+      email:   document.getElementById('email').value,
+      attending: document.querySelector('input[name="attending"]:checked')?.value || '',
+      guests:  document.getElementById('guests').value || '',
+      dietary: document.getElementById('dietary').value || '',
+      message: document.getElementById('message').value || ''
+    };
+
+    try {
+      await fetch(r.appsScriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(data)
+      });
+
+      formView.classList.add('form-hidden');
+      confirmView.classList.add('shown');
+
+      if (data.attending === 'Yes' && r.confirmYes) {
+        confirmHeadline.textContent = r.confirmYes.headline;
+        confirmMessage.innerHTML    = r.confirmYes.message;
+      } else if (data.attending === 'No' && r.confirmNo) {
+        confirmHeadline.textContent = r.confirmNo.headline;
+        confirmMessage.innerHTML    = r.confirmNo.message;
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      console.error(err);
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Reply';
+      alert('Something went wrong. Please try again.');
+    }
+  });
+</script>
+</body>
+</html>
