@@ -18,6 +18,9 @@
 <meta name="twitter:image" content="cover.png">
 <meta name="theme-color" content="#0d2a52">
 
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="favicon.svg">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Tenor+Sans&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
@@ -235,6 +238,42 @@
   .btn-secondary { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
   .btn-secondary:hover { background: var(--ink); color: var(--cream-warm); }
 
+  /* Calendar menu */
+  .cal-wrap { position: relative; }
+  .cal-menu {
+    position: absolute; left: 0; right: 0; top: calc(100% + 6px);
+    background: var(--cream-warm);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.25);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 5;
+  }
+  .cal-menu.shown { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .cal-menu a, .cal-menu button {
+    display: block; width: 100%;
+    padding: 14px 18px;
+    background: transparent; border: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px; color: var(--ink);
+    text-align: left; text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+  }
+  .cal-menu a:last-child, .cal-menu button:last-child { border-bottom: none; }
+  .cal-menu a:hover, .cal-menu button:hover { background: rgba(201, 169, 97, 0.15); }
+  .cal-menu .cal-item-label {
+    display: block;
+    font-family: 'Tenor Sans', serif;
+    font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 2px;
+  }
+
   .signoff {
     font-family: 'Caveat', cursive; font-size: 18px;
     color: var(--gold); margin-top: 26px;
@@ -259,7 +298,7 @@
 <div class="stars" id="stars"></div>
 
 <div class="stage">
-  <div class="envelope" id="envelope" onclick="openEnvelope()">
+  <div class="envelope" id="envelope">
     <div class="envelope-cover" id="envelopeCover"></div>
     <div class="open-hint" id="openHint">Tap to Open</div>
   </div>
@@ -301,6 +340,20 @@
 </div>
 
 <script>
+  // ─── Bind envelope click FIRST, before any config code that could throw ───
+  function openEnvelope() {
+    const env = document.getElementById('envelope');
+    const card = document.getElementById('card');
+    if (!env || !card) return;
+    if (env.classList.contains('opened')) return;
+    env.classList.add('opened');
+    setTimeout(() => {
+      card.classList.add('shown');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 600);
+  }
+  document.getElementById('envelope').addEventListener('click', openEnvelope);
+
   // ─── Apply config ─────────────────────────────────────────────────────
   const cfg = window.CARD_CONFIG;
   if (!cfg) { document.body.innerHTML = '<p style="color:#fff;padding:40px;">Missing config.js</p>'; throw new Error('no config'); }
@@ -374,6 +427,110 @@
     actionsEl.appendChild(a);
   });
 
+  // ─── Add to Calendar button ────────────────────────────────────────
+  if (cfg.calendar && cfg.calendar.start && cfg.calendar.end) {
+    const cal = cfg.calendar;
+
+    // Format ISO datetime → calendar format: YYYYMMDDTHHmmssZ (UTC)
+    const toCalUTC = (iso) => {
+      const d = new Date(iso);
+      const pad = (n) => String(n).padStart(2, '0');
+      return d.getUTCFullYear() +
+             pad(d.getUTCMonth() + 1) +
+             pad(d.getUTCDate()) + 'T' +
+             pad(d.getUTCHours()) +
+             pad(d.getUTCMinutes()) +
+             pad(d.getUTCSeconds()) + 'Z';
+    };
+
+    const startUTC = toCalUTC(cal.start);
+    const endUTC   = toCalUTC(cal.end);
+
+    // Google Calendar URL
+    const googleUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE&' + new URLSearchParams({
+      text: cal.title || '',
+      dates: `${startUTC}/${endUTC}`,
+      details: cal.description || '',
+      location: cal.location || '',
+    }).toString();
+
+    // Outlook web URL (uses ISO with offset, not UTC)
+    const outlookUrl = 'https://outlook.live.com/calendar/0/deeplink/compose?' + new URLSearchParams({
+      path: '/calendar/action/compose',
+      rru: 'addevent',
+      subject: cal.title || '',
+      startdt: cal.start,
+      enddt: cal.end,
+      body: cal.description || '',
+      location: cal.location || '',
+    }).toString();
+
+    // ICS file (Apple Calendar, Outlook desktop, anything else)
+    // RFC 5545 escaping: backslash-escape commas, semicolons, backslashes; \n for newlines
+    const icsEscape = (s) => (s || '')
+      .replace(/\\/g, '\\\\')
+      .replace(/\n/g, '\\n')
+      .replace(/,/g, '\\,')
+      .replace(/;/g, '\\;');
+
+    const icsLines = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Cards//EN',
+      'CALSCALE:GREGORIAN',
+      'BEGIN:VEVENT',
+      `UID:${startUTC}-${(cal.title || 'event').replace(/\s+/g, '-')}@cards`,
+      `DTSTAMP:${toCalUTC(new Date().toISOString())}`,
+      `DTSTART:${startUTC}`,
+      `DTEND:${endUTC}`,
+      `SUMMARY:${icsEscape(cal.title)}`,
+      `DESCRIPTION:${icsEscape(cal.description)}`,
+      `LOCATION:${icsEscape(cal.location)}`,
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ];
+    const icsBlob = new Blob([icsLines.join('\r\n')], { type: 'text/calendar' });
+    const icsUrl = URL.createObjectURL(icsBlob);
+    const icsFilename = ((cal.title || 'event').toLowerCase().replace(/[^a-z0-9]+/g, '-')) + '.ics';
+
+    // Build the wrapper button + dropdown menu
+    const wrap = document.createElement('div');
+    wrap.className = 'cal-wrap';
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'btn btn-secondary';
+    trigger.textContent = 'Add to Calendar';
+
+    const menu = document.createElement('div');
+    menu.className = 'cal-menu';
+    menu.innerHTML = `
+      <a href="${icsUrl}" download="${icsFilename}">
+        <span class="cal-item-label">Apple · Outlook · Other</span>
+        Download .ics file
+      </a>
+      <a href="${googleUrl}" target="_blank" rel="noopener">
+        <span class="cal-item-label">Google</span>
+        Add to Google Calendar
+      </a>
+      <a href="${outlookUrl}" target="_blank" rel="noopener">
+        <span class="cal-item-label">Outlook Web</span>
+        Add to Outlook.com
+      </a>
+    `;
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menu.classList.toggle('shown');
+    });
+    document.addEventListener('click', () => menu.classList.remove('shown'));
+    menu.addEventListener('click', (e) => e.stopPropagation());
+
+    wrap.appendChild(trigger);
+    wrap.appendChild(menu);
+    actionsEl.appendChild(wrap);
+  }
+
   // Starfield (optional)
   if (cfg.theme?.showStars !== false) {
     const starsContainer = document.getElementById('stars');
@@ -386,17 +543,6 @@
       star.style.animationDuration = (2 + Math.random() * 3) + 's';
       starsContainer.appendChild(star);
     }
-  }
-
-  function openEnvelope() {
-    const env = document.getElementById('envelope');
-    const card = document.getElementById('card');
-    if (env.classList.contains('opened')) return;
-    env.classList.add('opened');
-    setTimeout(() => {
-      card.classList.add('shown');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 600);
   }
 </script>
 </body>

@@ -50,6 +50,18 @@ window.CARD_CONFIG = {
     signoff: "with love, James & Sean",   // handwritten line at bottom
   },
 
+  // ─── Calendar event ──────────────────────────────────────────────────
+  // Powers the "Add to Calendar" button. Datetimes in ISO format with
+  // timezone offset. For ET use -04:00 (DST) or -05:00 (standard).
+  calendar: {
+    title:       "Atlas's Baby Shower",
+    description: "A baby shower for Evan & Selina, celebrating the impending arrival of Atlas. Hosted by James & Sean. Dinner provided.",
+    location:    "329 11th Street NE, Washington, DC 20002",
+    // ISO 8601 with offset. June 8 2026 5:30 PM Eastern (DST = -04:00)
+    start:       "2026-06-08T17:30:00-04:00",
+    end:         "2026-06-08T21:00:00-04:00",   // best guess; edit as needed
+  },
+
   // ─── RSVP page ────────────────────────────────────────────────────────
   rsvp: {
     eyebrow:    "Kindly Reply",
@@ -57,7 +69,7 @@ window.CARD_CONFIG = {
     subhead:    "June 8<sup>th</sup> · Washington, DC",
 
     // Where RSVPs go. Paste your Google Apps Script Web App URL here.
-    appsScriptUrl: "https://script.google.com/macros/s/AKfycbzmJtQjDai1nNLDnJkdhz90kzKnmd8ks7tTqI7DzqsEqFq9TB44KjjhFuNlyZ6CfQ5Q/exec",
+    appsScriptUrl: "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE",
 
     // Confirmation messages after submission
     confirmYes: {

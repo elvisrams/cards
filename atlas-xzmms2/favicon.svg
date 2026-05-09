@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Background circle (the "wax seal" feel) -->
+  <rect width="64" height="64" rx="12" fill="#1a3a6b"/>
+
+  <!-- Envelope body -->
+  <rect x="10" y="18" width="44" height="32" rx="2" fill="#faf3e0" stroke="#c9a961" stroke-width="1.5"/>
+
+  <!-- Envelope flap (closed) -->
+  <path d="M 10 19 L 32 36 L 54 19" fill="none" stroke="#c9a961" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- Wax seal in the center -->
+  <circle cx="32" cy="36" r="6" fill="#c9a961"/>
+  <circle cx="32" cy="36" r="6" fill="none" stroke="#1a3a6b" stroke-width="0.8" opacity="0.4"/>
+
+  <!-- Star/compass mark on the seal -->
+  <path d="M 32 32.5 L 32.7 35.3 L 35.5 36 L 32.7 36.7 L 32 39.5 L 31.3 36.7 L 28.5 36 L 31.3 35.3 Z"
+        fill="#1a3a6b"/>
+</svg>
