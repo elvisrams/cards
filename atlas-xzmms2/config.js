@@ -27,8 +27,8 @@ window.CARD_CONFIG = {
     hosts:     "James & Sean",             // who's hosting (use & freely)
     intro:     "request the pleasure of your company<br>at a baby shower celebrating",
     honorees:  "Evan & Selina",            // guests of honor
-    subhead:   "And the impending arrival of",  // small line above the big name
-    feature:   "Atlas",                    // BIG word — main name/event title
+    subhead:   "Celebrating",              // small line above the big text
+    feature:   "Their Baby Boy",           // BIG text — main feature line
 
     tagline:   "The adventure starts in July.<br>The party starts June 8<sup>th</sup>.",
 
@@ -37,7 +37,7 @@ window.CARD_CONFIG = {
       { label: "Where",       value: "329 11<sup>th</sup> Street NE<br>Washington, DC 20002",
                               link:  "https://maps.app.goo.gl/Nj1S126tVme6LA396" },
       { label: "Provisions",  value: "<em>Dinner provided</em>" },
-      { label: "For the Captain's Quarters", value: "Babylist Registry",
+      { label: "Registry",    value: "Babylist",
                               link:  "https://my.babylist.com/baby-reg-selina-wang" },
     ],
 
@@ -54,18 +54,17 @@ window.CARD_CONFIG = {
   // Powers the "Add to Calendar" button. Datetimes in ISO format with
   // timezone offset. For ET use -04:00 (DST) or -05:00 (standard).
   calendar: {
-    title:       "Atlas's Baby Shower",
-    description: "A baby shower for Evan & Selina, celebrating the impending arrival of Atlas. Hosted by James & Sean. Dinner provided.",
+    title:       "Baby Shower for Evan & Selina",
+    description: "A baby shower for Evan & Selina, hosted by James & Sean. Dinner provided.",
     location:    "329 11th Street NE, Washington, DC 20002",
-    // ISO 8601 with offset. June 8 2026 5:30 PM Eastern (DST = -04:00)
     start:       "2026-06-08T17:30:00-04:00",
-    end:         "2026-06-08T21:00:00-04:00",   // best guess; edit as needed
+    end:         "2026-06-08T21:00:00-04:00",
   },
 
   // ─── RSVP page ────────────────────────────────────────────────────────
   rsvp: {
     eyebrow:    "Kindly Reply",
-    headline:   "For Atlas",
+    headline:   "RSVP",
     subhead:    "June 8<sup>th</sup> · Washington, DC",
 
     // Where RSVPs go. Paste your Google Apps Script Web App URL here.
@@ -74,17 +73,16 @@ window.CARD_CONFIG = {
     // Confirmation messages after submission
     confirmYes: {
       headline: "See You Soon",
-      message:  "Your reply has been recorded. We can't wait to celebrate Atlas with you on June 8<sup>th</sup>.",
+      message:  "Your reply has been recorded. We can't wait to celebrate with you on June 8<sup>th</sup>.",
     },
     confirmNo: {
       headline: "Thank You",
-      message:  "We'll miss you — but thank you for letting us know. Atlas already has a wonderful village.",
+      message:  "We'll miss you — but thank you for letting us know.",
     },
     signoff: "— James & Sean",
   },
 
-  // ─── Theme (optional — keep defaults for the ocean/Atlas look) ───────
-  // To make a different visual theme, change these CSS color values.
+  // ─── Theme (optional — keep defaults for the ocean look) ─────────────
   theme: {
     ink:         "#1a3a6b",   // deep blue text
     inkSoft:     "#2d4a7a",   // softer blue for secondary text
