@@ -33,7 +33,7 @@ window.CARD_CONFIG = {
     tagline:   "The adventure starts in July.<br>The party starts June 8<sup>th</sup>.",
 
     details: [
-      { label: "When",        value: "Sunday, June 8<sup>th</sup>, 2026", sub: "5:30 in the evening" },
+      { label: "When",        value: "Monday, June 8<sup>th</sup>, 2026", sub: "5:30 in the evening" },
       { label: "Where",       value: "329 11<sup>th</sup> Street NE<br>Washington, DC 20002",
                               link:  "https://maps.app.goo.gl/Nj1S126tVme6LA396" },
       { label: "Provisions",  value: "<em>Dinner provided</em>" },
